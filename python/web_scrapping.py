@@ -1,12 +1,12 @@
 from bs4 import BeautifulSoup
 import requests
+import re
 
-url = "https://www.newegg.com/gigabyte-geforce-rtx-3080-gv-n3080gaming-oc-10gd/p" \
-      "/N82E16814932459?Description=rtx%203080&cm_re=rtx_3080-_-14-932-459-_-Product"
+gpu = input("What gpu are you looking for? ")
+url = f"https://www.newegg.com/p/pl?d={gpu}&N=4131"
 result = requests.get(url)
 doc = BeautifulSoup(result.text, "html.parser")
 
-prices = doc.find_all(text="$")
-parent = prices[0].parent
-strong = parent.find("strong")
-print(strong.string)
+page_text = doc.find(class_="list-tool-pagination-text").strong
+pages = int(str(page_text).split("/")[-2].split(">")[-1][:-1])
+print(pages)
